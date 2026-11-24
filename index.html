@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ชุด Prompt คลิปเล่าข่าว 30 วิ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;700&family=Sarabun:wght@400;600;700&display=swap">
+<style>
+/* Layout: one narrow column for phones — fill-once form on top, then steps 1–8 in working order, each prompt with its own copy button */
+:root{
+  --bg:#F3F5F9; --surface:#FFFFFF; --ink:#1F2A44; --muted:#5B6478; --line:#DCE2EC;
+  --accent:#E8794A; --accent-ink:#FFFFFF; --accent-soft:#FCE6DA;
+  --code-bg:#1F2A44; --code-ink:#F2F0EA; --fill:#FFD84D; --missing:#FF8FA0;
+  --ok:#1E9E55; --ok-soft:#E3F5EA;
+  --display:"Anuphan","Noto Sans Thai",system-ui,sans-serif;
+  --body:"Sarabun","Noto Sans Thai",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121826; --surface:#1B2335; --ink:#E9EDF5; --muted:#A3ADC2; --line:#2C3650;
+  --accent:#F08A5D; --accent-ink:#1A1206; --accent-soft:#3A2A22;
+  --code-bg:#0B1020; --code-ink:#EDEAE2; --fill:#FFD84D; --missing:#FF8FA0;
+  --ok:#4CC27E; --ok-soft:#173326; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121826; --surface:#1B2335; --ink:#E9EDF5; --muted:#A3ADC2; --line:#2C3650;
+  --accent:#F08A5D; --accent-ink:#1A1206; --accent-soft:#3A2A22;
+  --code-bg:#0B1020; --code-ink:#EDEAE2; --fill:#FFD84D; --missing:#FF8FA0;
+  --ok:#4CC27E; --ok-soft:#173326; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+.wrap{max-width:680px;margin:0 auto;padding-block:20px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--display);line-height:1.3;text-wrap:balance;margin:0}
+h1{font-size:1.55rem}
+h2{font-size:1.2rem}
+.lead{color:var(--muted);margin:4px 0 0}
+.how{display:flex;flex-direction:column;gap:6px;margin:12px 0 0;padding:0;list-style:none}
+.how li{display:flex;gap:10px;align-items:baseline}
+.how b.n{flex:0 0 auto;font-family:var(--display);color:var(--accent)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel.form{border:2px solid var(--accent)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:460px){.row2{grid-template-columns:1fr}}
+label.f{display:flex;flex-direction:column;gap:4px;font-weight:600;font-size:.95rem;min-width:0}
+label.f small{font-weight:400;color:var(--muted)}
+select,input[type=text],textarea{width:100%;font:inherit;font-weight:400;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+textarea{min-height:84px;resize:vertical}
+input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.choice{display:flex;flex-wrap:wrap;gap:8px}
+.choice label{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:600;cursor:pointer}
+.choice input{accent-color:var(--accent)}
+fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+legend{font-weight:600;font-size:.95rem;padding:0;margin-bottom:4px}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button{font:inherit;font-weight:700;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px 14px;cursor:pointer}
+button.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button.ghost{background:transparent}
+.saved{font-size:.85rem;color:var(--muted)}
+.jump{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.jump a{flex:0 0 auto;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-weight:600;font-size:.9rem}
+.step{scroll-margin-top:12px}
+.step.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%{box-shadow:0 0 0 4px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
+@media (prefers-reduced-motion:reduce){.step.flash{animation:none;box-shadow:0 0 0 3px var(--accent)}}
+.head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.badge{font-family:var(--display);font-weight:700;background:var(--ink);color:var(--surface);border-radius:8px;padding:2px 10px;font-size:.9rem}
+.app{background:var(--accent-soft);color:var(--ink);border-radius:999px;padding:2px 10px;font-size:.85rem;font-weight:600}
+.note{color:var(--muted);font-size:.92rem;margin:0}
+.prompt{display:flex;flex-direction:column;gap:8px;min-width:0}
+.plabel{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-weight:700}
+.ptext{background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:12px 14px;white-space:pre-wrap;word-break:break-word;font-size:.95rem;line-height:1.65;margin:0}
+.ptext .v{color:var(--fill);font-weight:700}
+.ptext .m{color:var(--missing);font-weight:700}
+.need{font-size:.85rem;font-weight:600;color:var(--muted)}
+.need.ok{color:var(--ok)}
+button.copy{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);padding:12px 16px;font-size:1rem}
+button.copy.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.later{background:var(--ok-soft);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.later h3{font-size:1rem}
+footer{color:var(--muted);font-size:.85rem;text-align:center}
+.sample{font-size:.85rem;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>ชุด Prompt คลิปเล่าข่าว 30 วิ</h1>
+    <p class="lead">ใช้คู่กับคู่มือ · ทำงานบนมือถือได้</p>
+    <ol class="how">
+      <li><b class="n">1</b><span>กรอกข้อมูลเรื่องของทีมในกรอบสีส้ม <b>ครั้งเดียว</b></span></li>
+      <li><b class="n">2</b><span>เลื่อนลงไปที่ขั้นที่กำลังทำ ทุก Prompt เติมข้อมูลให้แล้ว</span></li>
+      <li><b class="n">3</b><span>กด <b>คัดลอก</b> แล้วไปวางใน Gemini หรือ Flow</span></li>
+    </ol>
+  </header>
+
+  <section class="panel form" aria-labelledby="formh">
+    <h2 id="formh">ข้อมูลเรื่องของทีม</h2>
+    <label class="f" for="pick">เรื่องที่ทีมได้ <small>เลือกแล้ว ชื่อเรื่องและชุดข้อมูลจะเติมให้เอง</small>
+      <select id="pick">
+        <option value="">— เลือกเรื่อง หรือกรอกเรื่องของทีมเองด้านล่าง —</option>
+        <option value="0">1. บ้านโป่ง เมืองช่างต่อรถบัส</option>
+        <option value="1">2. เต้าหู้ดำโพธาราม</option>
+        <option value="2">3. สายค้างคาวเขาช่องพราน</option>
+        <option value="3">4. คลองดำเนินสะดวก</option>
+        <option value="4">5. เขางู</option>
+        <option value="5">6. หนังใหญ่วัดขนอน</option>
+        <option value="6">7. เถ้าฮงไถ่</option>
+        <option value="7">8. เมืองโบราณคูบัว</option>
+        <option value="8">9. โอ๊ะป่อย สวนผึ้ง</option>
+        <option value="9">10. ภาพบนผนังวัดคงคาราม</option>
+      </select>
+    </label>
+    <label class="f" for="topic">ชื่อเรื่อง
+      <input type="text" id="topic" data-k="topic" placeholder="เช่น เต้าหู้ดำโพธาราม">
+    </label>
+    <label class="f" for="data">ชุดข้อมูล <small>วางข้อมูลที่ได้รับ หรือที่ไปทำข่าวมา</small>
+      <textarea id="data" data-k="data" placeholder="วางข้อมูลข่าวตรงนี้"></textarea>
+    </label>
+    <div class="row2">
+      <fieldset>
+        <legend>ผู้ประกาศเป็น</legend>
+        <div class="choice">
+          <label><input type="radio" name="gender" id="g-m" value="ผู้ชาย" data-k="gender">ผู้ชาย</label>
+          <label><input type="radio" name="gender" id="g-f" value="ผู้หญิง" data-k="gender">ผู้หญิง</label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>โทนสีปก</legend>
+        <div class="choice">
+          <label><input type="radio" name="tone" id="t-d" value="น้ำเงินเข้มแสงฟุ้ง" data-k="tone">น้ำเงินเข้ม</label>
+          <label><input type="radio" name="tone" id="t-l" value="ฟ้าสดใส" data-k="tone">ฟ้าสดใส</label>
+        </div>
+      </fieldset>
+    </div>
+    <label class="f" for="outfit">ชุดที่ผู้ประกาศใส่
+      <input type="text" id="outfit" data-k="outfit" placeholder="เช่น เสื้อเชิ้ตลายสก็อตทับเสื้อยืดดำ">
+    </label>
+    <div class="btns">
+      <button type="button" class="main" id="loadSample">ใส่ตัวอย่าง: หิมะตกที่ราชบุรี</button>
+      <button type="button" class="ghost" id="clearAll">ล้างทั้งหมด</button>
+    </div>
+    <p class="saved" id="saved">ข้อมูลที่กรอกจะจำไว้ในมือถือเครื่องนี้ สลับแอปไปมาก็ไม่หาย</p>
+  </section>
+
+  <nav class="jump" aria-label="ไปที่ขั้น">
+    <a href="#p1">ขั้น 1</a><a href="#p2">ขั้น 2</a><a href="#p3">ขั้น 3</a><a href="#p4">ขั้น 4</a><a href="#p5">ขั้น 5</a><a href="#p6">ขั้น 6</a><a href="#p8">ขั้น 8</a>
+  </nav>
+
+  <section class="panel step" id="p1">
+    <div class="head"><span class="badge">ขั้น 1</span><h2>หามุมเล่า</h2><span class="app">Gemini</span></div>
+    <div class="prompt" data-p="p1"></div>
+  </section>
+
+  <section class="panel step" id="p2">
+    <div class="head"><span class="badge">ขั้น 2</span><h2>พาดหัว + Hook</h2><span class="app">Gemini</span></div>
+    <label class="f" for="angle">มุมที่ทีมเลือก <small>ก๊อปมุมที่ชอบจากคำตอบขั้น 1 มาวาง</small>
+      <textarea id="angle" data-k="angle"></textarea>
+    </label>
+    <div class="prompt" data-p="p2"></div>
+  </section>
+
+  <section class="panel step" id="p3">
+    <div class="head"><span class="badge">ขั้น 3</span><h2>เขียนบท 3 ท่อน</h2><span class="app">Gemini</span></div>
+    <label class="f" for="hook">Hook ที่เลือก <small>ประโยคแรกจากคำตอบขั้น 2</small>
+      <input type="text" id="hook" data-k="hook">
+    </label>
+    <div class="prompt" data-p="p3"></div>
+    <div class="later">
+      <h3>วางบทที่ได้ตรงนี้ (ใช้ต่อในขั้น 5 และ 8)</h3>
+      <label class="f" for="s1">บทท่อน 1 <small>0–10 วิ · ประมาณ 28–30 คำ</small><textarea id="s1" data-k="s1"></textarea></label>
+      <label class="f" for="s2">บทท่อน 2 <small>10–20 วิ</small><textarea id="s2" data-k="s2"></textarea></label>
+      <label class="f" for="s3">บทท่อน 3 <small>20–30 วิ</small><textarea id="s3" data-k="s3"></textarea></label>
+    </div>
+  </section>
+
+  <section class="panel step" id="p4">
+    <div class="head"><span class="badge">ขั้น 4</span><h2>รูปผู้ประกาศพื้นเขียว</h2><span class="app">Gemini</span></div>
+    <p class="note">แนบรูปครึ่งตัวของผู้ประกาศก่อน แล้วค่อยวาง Prompt</p>
+    <div class="prompt" data-p="p4"></div>
+  </section>
+
+  <section class="panel step" id="p5">
+    <div class="head"><span class="badge">ขั้น 5</span><h2>ให้ AI พูด 3 ท่อน</h2><span class="app">Flow</span></div>
+    <p class="note">ใช้รูปพื้นเขียวรูปเดิมทุกครั้ง · ตั้งค่า 9:16 · 360p · 10 วินาที</p>
+    <div class="prompt" data-p="p5a"></div>
+    <div class="prompt" data-p="p5b"></div>
+    <div class="prompt" data-p="p5c"></div>
+  </section>
+
+  <section class="panel step" id="p6">
+    <div class="head"><span class="badge">ขั้น 6</span><h2>ภาพปก + ภาพฉากหลัง</h2><span class="app">Gemini</span></div>
+    <div class="later">
+      <h3>ข้อความปก (จากคำตอบขั้น 2)</h3>
+      <div class="row2">
+        <label class="f" for="rib">คำบนริบบิ้น<input type="text" id="rib" data-k="rib" placeholder="เช่น รู้หรือไม่!"></label>
+        <label class="f" for="head">หัวข้อข่าว<input type="text" id="head" data-k="head"></label>
+      </div>
+      <label class="f" for="scene">ภาพด้านบนของปกเป็นฉากอะไร<input type="text" id="scene" data-k="scene"></label>
+      <div class="row2">
+        <label class="f" for="f1">ข้อเท็จจริง 1 <small>เว้นว่างได้ ถ้าไม่ต้องการแผงข้อมูล</small><input type="text" id="f1" data-k="f1"></label>
+        <label class="f" for="f1b">บรรทัดรอง 1<input type="text" id="f1b" data-k="f1b"></label>
+        <label class="f" for="f2">ข้อเท็จจริง 2<input type="text" id="f2" data-k="f2"></label>
+        <label class="f" for="f2b">บรรทัดรอง 2<input type="text" id="f2b" data-k="f2b"></label>
+      </div>
+    </div>
+    <div class="prompt" data-p="p6"></div>
+    <div class="later">
+      <h3>ภาพฉากหลัง 2–6 เป็นฉากอะไร</h3>
+      <label class="f" for="b2">ภาพ 2 <small>5–10 วิ</small><input type="text" id="b2" data-k="b2"></label>
+      <label class="f" for="b3">ภาพ 3 <small>10–15 วิ</small><input type="text" id="b3" data-k="b3"></label>
+      <label class="f" for="b4">ภาพ 4 <small>15–20 วิ</small><input type="text" id="b4" data-k="b4"></label>
+      <label class="f" for="b5">ภาพ 5 <small>20–25 วิ</small><input type="text" id="b5" data-k="b5"></label>
+      <label class="f" for="b6">ภาพ 6 <small>25–30 วิ</small><input type="text" id="b6" data-k="b6"></label>
+    </div>
+    <p class="note">เริ่มแชทใหม่ วาง Prompt 7 ก่อน จากนั้นวางบรรทัด "ภาพต่อไป" ทีละอันในแชทเดิม</p>
+    <div class="prompt" data-p="p7"></div>
+    <div class="prompt" data-p="p7b3"></div>
+    <div class="prompt" data-p="p7b4"></div>
+    <div class="prompt" data-p="p7b5"></div>
+    <div class="prompt" data-p="p7b6"></div>
+  </section>
+
+  <section class="panel step" id="p8">
+    <div class="head"><span class="badge">ขั้น 8</span><h2>แคปชันโพสต์</h2><span class="app">Gemini</span></div>
+    <p class="note">ขั้น 7 ตัดต่อใน CapCut ไม่มี Prompt</p>
+    <div class="prompt" data-p="p8"></div>
+  </section>
+
+  <footer>ข้อเท็จจริงในคลิปต้องมาจากการทำข่าวจริง ไม่ใช่จาก AI · ติดป้าย "ผู้ประกาศและภาพประกอบสร้างด้วย AI" ทุกครั้ง</footer>
+</div>
+
+<script>
+(function(){
+  var LABEL={topic:'ชื่อเรื่อง',data:'ชุดข้อมูล',gender:'ผู้ชาย/ผู้หญิง',tone:'โทนสีปก',outfit:'ชุดที่ใส่',angle:'มุมที่ทีมเลือก',hook:'Hook ที่เลือก',
+    s1:'บทท่อน 1',s2:'บทท่อน 2',s3:'บทท่อน 3',rib:'คำบนริบบิ้น',head:'หัวข้อข่าว',scene:'ฉากด้านบนของปก',
+    f1:'ข้อเท็จจริง 1',f1b:'บรรทัดรอง 1',f2:'ข้อเท็จจริง 2',f2b:'บรรทัดรอง 2',b2:'ฉากภาพ 2',b3:'ฉากภาพ 3',b4:'ฉากภาพ 4',b5:'ฉากภาพ 5',b6:'ฉากภาพ 6'};
+  var S={};
+  function F(k){return {k:k};}
+  var P={
+    p1:{t:'Prompt 1 · หามุมเล่า',parts:function(){return ['คุณเป็นบรรณาธิการข่าวท้องถิ่น ช่วยเสนอมุมเล่า 3 มุมสำหรับคลิปข่าวสั้น 30 วินาที เรื่อง ',F('topic'),' สำหรับคนทั่วไปในจังหวัดราชบุรี\nใช้เฉพาะข้อมูลนี้: ',F('data'),'\nแต่ละมุมขอ: มุมเล่า 1 บรรทัด / ทำไมคนจะสนใจ / ใช้ข้อเท็จจริงข้อไหน\nห้ามเพิ่มข้อมูลที่ไม่มีในชุดข้อมูล'];}},
+    p2:{t:'Prompt 2 · พาดหัว + Hook',parts:function(){return ['จากมุมนี้: ',F('angle'),'\nช่วยเขียนข้อความปกคลิปแนวตั้ง 5 แบบ แต่ละแบบมี: คำบนริบบิ้น 2–3 พยางค์ที่ทำให้หยุดดู (เช่น เตือนภัย! / รู้หรือไม่!) · หัวข้อข่าวไม่เกิน 8 คำ · ข้อเท็จจริง 2 ข้อ ข้อละ หัวข้อสั้น + บรรทัดรอง\nพร้อมประโยคแรกของคลิป (Hook) ที่พูดจบใน 5 วินาที\nห้ามเกินจริง ทุกคำต้องมีอยู่ในข้อมูลนี้: ',F('data')];}},
+    p3:{t:'Prompt 3 · บทพูด 3 ท่อน',parts:function(){return ['เขียนบทพูดเล่าเรื่อง 30 วินาที เรื่อง ',F('topic'),' ภาษาพูด ตื่นเต้น ประโยคสั้น เหมือนพิธีกรเล่าให้เพื่อนฟัง\nเริ่มด้วย Hook: ',F('hook'),'\nแบ่งเป็น 3 ท่อน ท่อนละ 28–30 คำ (อ่านจบใน 10 วินาที)\nท่อน 1: Hook → พาไปเห็นสถานที่หรือคน\nท่อน 2: สิ่งที่เกิดขึ้น → ข้อเท็จจริง 1 อย่าง\nท่อน 3: ข้อเท็จจริงหรือผลลัพธ์ → ทิ้งประเด็นให้ติดตาม\nใช้เฉพาะข้อมูลนี้: ',F('data'),'\nส่งเฉพาะบทพร้อมอ่าน 3 ท่อน ไม่ต้องมีคำอธิบาย'];}},
+    p4:{t:'Prompt 4 · รูปผู้ประกาศพื้นเขียว',parts:function(){return ['ใช้ใบหน้าของคนในรูปที่แนบ ห้ามเปลี่ยนหน้าตา ทำเป็นภาพถ่ายเหมือนจริง เห็นครึ่งตัวตั้งแต่หัวถึงเอว ยืนตรงกลางภาพ หันหน้าตรง มองกล้อง ยิ้มเล็กน้อย มือขวาถือไมค์สีดำระดับอก ใส่',F('outfit'),'\nพื้นหลังเป็นสีเขียวล้วนเรียบ (กรีนสกรีน) ไม่มีเงาบนพื้นหลัง แสงสว่างสม่ำเสมอทั้งตัว แนวตั้ง 9:16 ไม่มีตัวหนังสือ'];}}
+  };
+  function p5(k){return function(){return [F('gender'),'ในภาพเป็นพิธีกรรายการท่องเที่ยวสายตื่นเต้น ยืนหน้าฉากสีเขียวเรียบ ฉากหลังเป็นสีเขียวล้วนตลอดทั้งคลิป ถือไมค์ มองตรงเข้ากล้อง น้ำเสียงตื่นเต้น มีพลัง เสียงขึ้นสูงลงต่ำชัดเจน เน้นเสียงคำสำคัญ จังหวะเร็ว กระชับ ไม่เว้นช่วงนาน ตาเป็นประกาย มือผายประกอบการพูด กล้องนิ่ง พูดว่า: "',F(k),'" พูดจบแล้วยิ้มนิ่ง ๆ มองกล้อง ไม่พูดอะไรเพิ่ม ห้ามพูดซ้ำ ไม่มีเพลง เสียงพูดอย่างเดียว'];};}
+  P.p5a={t:'Prompt 5 · ท่อน 1',parts:p5('s1')};
+  P.p5b={t:'Prompt 5 · ท่อน 2',parts:p5('s2')};
+  P.p5c={t:'Prompt 5 · ท่อน 3',parts:p5('s3')};
+  P.p6={t:'Prompt 6 · ภาพปก',parts:function(){
+    var a=['ทำปกคลิปแนวตั้ง 9:16 สไตล์ปกข่าวไทย ภาพเหตุการณ์ด้านบน พื้นหลัง',F('tone'),' ริบบิ้นแดงสามมิติ ป้ายเล็กด้านบน "ภาพประกอบสร้างด้วย AI"\nไม่ต้องมีคน เว้นพื้นที่ด้านล่าง 35% ให้ว่าง\nภาพด้านบน: ',F('scene'),'\nริบบิ้นแดง: "',F('rib'),'" ใต้ลงมาตัวหนาสีขาว: "',F('head'),'"'];
+    if((S.f1||'').trim()||(S.f2||'').trim()){a=a.concat(['\nแผงข้อมูลสีกรมท่า 2 แถว หัวข้อสีเหลือง บรรทัดรองสีขาว: "',F('f1'),'" / "',F('f1b'),'" · "',F('f2'),'" / "',F('f2b'),'"']);}
+    return a.concat(['\nตัวหนังสือทุกคำต้องสะกดตรงตามที่กำหนดทุกตัวอักษร ห้ามมีตัวหนังสืออื่น ไม่มีโลโก้']);}};
+  P.p7={t:'Prompt 7 · ภาพ 2 (วางก่อน)',parts:function(){return ['สร้างภาพถ่ายเหมือนจริง แนวตั้ง 9:16: ',F('b2'),'\nจุดสำคัญของภาพอยู่ครึ่งบน ครึ่งล่างของภาพเรียบ ๆ ไม่มีจุดสำคัญ (จะมีคนยืนบัง) ด้านบนสุดโล่งพอวางพาดหัว ไม่มีตัวหนังสือ ไม่มีโลโก้ ถ้ามีคนให้เห็นหน้าไม่ชัด ห้ามเป็นบุคคลจริงที่ระบุตัวตนได้'];}};
+  ['b3','b4','b5','b6'].forEach(function(k){P['p7'+k]={t:'ภาพ '+k.slice(1)+' (วางต่อในแชทเดิม)',parts:function(){return ['ภาพต่อไป สไตล์เดียวกัน: ',F(k)];}};});
+  P.p8={t:'Prompt 8 · แคปชันโพสต์',parts:function(){return ['เขียนแคปชันโพสต์ Facebook สำหรับคลิปสั้นเรื่อง ',F('topic'),' ยาว 3–4 บรรทัด เปิดด้วยประโยคชวนสงสัย ใส่อีโมจิ 2–3 ตัว ปิดด้วยคำถามชวนคอมเมนต์ ตามด้วยแฮชแท็ก 3 อัน บรรทัดสุดท้ายเขียนว่า "ผู้ประกาศและภาพประกอบในคลิปสร้างด้วย AI" ใช้ข้อมูลจากบทนี้เท่านั้น ห้ามเพิ่มข้อมูลใหม่:\n',F('s1'),'\n',F('s2'),'\n',F('s3'),'\nขอ 3 แบบให้เลือก'];}};
+
+  var SAMPLE={
+    topic:'หิมะตกที่ราชบุรี',
+    data:'ข้อมูลสมมติสำหรับฝึก (ไม่ใช่เหตุการณ์จริง): เช้าวันที่ 18 ธันวาคม 2569 มีหิมะตกบนถนนเพชรเกษม ช่วงซุ้มป้ายยินดีต้อนรับสู่จังหวัดราชบุรี ถนนขาวทั้งเส้น รถขับช้าและเปิดไฟหน้า ชาวบ้านออกมาถ่ายรูป ต้นตาลข้างทางมีหิมะเกาะ อุณหภูมิติดลบ 1 องศา · เฉลย: ภาพทั้งหมดสร้างด้วย AI เพื่อสอนว่าข่าวปลอมทำได้ง่าย ต้องเช็กก่อนแชร์',
+    gender:'ผู้ชาย',tone:'ฟ้าสดใส',outfit:'เสื้อโค้ทพองสีแดงเลือดหมู ผ้าพันคอไหมพรมสีเทา และหมวกไหมพรมสีเทา',
+    angle:'ข่าวปลอมที่ AI ทำได้ใน 30 วินาที: เปิดด้วยภาพหิมะตกที่ราชบุรีให้คนตกใจ แล้วเฉลยตอนจบว่าทั้งหมด AI สร้าง',
+    hook:'ใครจะเชื่อครับ! หิมะตกที่ราชบุรี!',
+    s1:'ใครจะเชื่อครับ! หิมะตกที่ราชบุรี! ตอนนี้ผมอยู่หน้าซุ้มป้ายยินดีต้อนรับสู่ราชบุรี ถนนทั้งเส้นขาวโพลนไปหมดเลยครับ',
+    s2:'รถค่อย ๆ ขับผ่าน ชาวบ้านออกมาถ่ายรูปกันเต็มข้างทาง ต้นตาลขาวไปทั้งต้น บรรยากาศเหมือนอยู่ต่างประเทศ',
+    s3:'แต่ทั้งหมดนี้ AI สร้างขึ้นครับ ไม่ใช่เรื่องจริง ข่าวแบบนี้ทำได้ในสามสิบวินาที ก่อนแชร์ เช็กก่อนทุกครั้งนะครับ',
+    rib:'ข่าวด่วน!',head:'หิมะตก! ที่เดียวในไทย',
+    scene:'ถนนทางหลวงเข้าราชบุรี หิมะตกเต็มฟ้า มีซุ้มป้ายสีน้ำเงินคร่อมถนนเขียนว่า "ยินดีต้อนรับสู่จังหวัดราชบุรี"',
+    f1:'',f1b:'',f2:'',f2b:'',
+    b2:'ถนนทางหลวงมีหิมะขาวโพลน ต้นตาลสองข้างทางมีหิมะเกาะ มุมกว้าง',
+    b3:'รถเก๋งและมอเตอร์ไซค์ขับช้า ๆ บนถนนหิมะ เปิดไฟหน้า',
+    b4:'ชาวบ้านยืนถ่ายรูปหิมะข้างถนน เห็นหน้าไม่ชัด',
+    b5:'มือถือในมือคนกำลังสร้างภาพหิมะตกด้วยแอป AI บนหน้าจอ',
+    b6:'แว่นขยายส่องหน้าจอมือถือที่มีข่าว พื้นหลังสีฟ้าสะอาด'
+  };
+
+  var TOPICS=[
+    ['บ้านโป่ง เมืองช่างต่อรถบัส','อำเภอบ้านโป่งมีอู่ต่อตัวถังรถโดยสารหลายแห่ง เช่น ในตำบลหนองอ้อและตำบลปากแรต · อู่วิกิจศิลป์ บ้านโป่ง ระบุว่าต่อตัวถังมามากกว่า 40 ปี รับงานประมาณ 60–80 คันต่อปี ต่อรถยาว 6 ถึง 12 เมตร ทั้งรถพัดลมและรถแอร์ · ก้าวหน้าบัสบอดี้ อำเภอบ้านโป่ง จดทะเบียนปี 2533 · (เรื่องประวัติยุคตัวถังไม้และคำว่า "เมืองต่อรถบัส" ยังไม่มีแหล่งยืนยัน ห้ามใส่ในคลิปจนกว่าจะสัมภาษณ์ช่างเอง)'],
+    ['เต้าหู้ดำโพธาราม','ร้านเต้าหู้ดำแม่เล็ก อยู่ถนนราษฎร์อุทิศ หลังสถานีรถไฟโพธาราม ขายมากว่า 50 ปี · ผู้ก่อตั้งคือคุณยายเซี่ยมจู แซ่ฉั่ว (แม่เล็ก) เดิมขายถั่วงอก เต้าหู้ขาว และเส้นก๋วยเตี๋ยวในตลาด · สูตรเดิมมาจากพ่อค้าในตลาดโพธารามที่เลิกขายไปแล้ว แม่เล็กนำมาทำขายต่อ · ต้มเต้าหู้ในน้ำพะโล้สมุนไพรด้วยเตาถ่านไฟอ่อน เคี่ยวราวสามวันจนน้ำพะโล้ซึมเข้าเนื้อ'],
+    ['สายค้างคาวยามเย็นที่เขาช่องพราน','ถ้ำค้างคาวอยู่ที่วัดเขาช่องพราน อำเภอโพธาราม เข้าชมฟรี · ค้างคาวส่วนใหญ่เป็นค้างคาวปากย่น · เริ่มบินออกราว 17.30–18.30 น. ตามฤดู ช่วง 15–20 นาทีแรกหนาแน่นที่สุด · วัดขายมูลค้างคาวเป็นปุ๋ย รายได้ใช้ดูแลวัดและเป็นทุนการศึกษาเด็กในพื้นที่ · นักวิจัยไทยและสหรัฐฯ ศึกษาว่าค้างคาวที่นี่ช่วยกินเพลี้ยกระโดดหลังขาว ศัตรูของนาข้าว · (จำนวนค้างคาวแต่ละแหล่งไม่ตรงกัน ห้ามใส่ตัวเลข)'],
+    ['คลองดำเนินสะดวก','คลองยาวประมาณ 35 กิโลเมตร เชื่อมแม่น้ำท่าจีนกับแม่น้ำแม่กลอง · ขุดสมัยรัชกาลที่ 4 โดยมีช่วง บุนนาค ดูแลการขุด · ต้นคลองอยู่ปากคลองบางยาง อำเภอบ้านแพ้ว สมุทรสาคร ปลายคลองอยู่ตำบลบางนกแขวก อำเภอบางคนที สมุทรสงคราม · ตลาดน้ำดำเนินสะดวกที่มีชื่อเสียงตั้งอยู่ริมคลองนี้ · (ปี พ.ศ. ที่ขุด แหล่งไม่ตรงกัน ให้พูดแค่ว่าสมัยรัชกาลที่ 4)'],
+    ['เขางู','อุทยานหินเขางู อยู่ตำบลเกาะพลับพลา อำเภอเมืองราชบุรี ห่างตัวเมืองประมาณ 8 กิโลเมตร · เขาเป็นหินปูนคุณภาพดี ในอดีตมีสัมปทานระเบิดหินและย่อยหิน ต่อมาภาครัฐและประชาชนขอยกเลิกสัมปทาน แล้วพัฒนาเป็นสวนสาธารณะและแหล่งท่องเที่ยว · ในถ้ำมีพระพุทธรูปจำหลักนั่งห้อยพระบาท ศิลปะทวารวดี'],
+    ['หนังใหญ่วัดขนอน','วัดขนอน ตำบลสร้อยฟ้า อำเภอโพธาราม เป็นที่ตั้งพิพิธภัณฑ์หนังใหญ่ · หนังใหญ่วัดขนอนได้รับการยกย่องจาก ACCU ภายใต้ยูเนสโก เมื่อมิถุนายน 2550 · หนังใหญ่แสดงเรื่องรามเกียรติ์ ใช้ตัวหนังแกะสลักประกอบการเชิด มีดนตรีไทยบรรเลงประกอบ · ก่อนเปิดลังตัวหนังต้องทำพิธีบอกกล่าวครูอาจารย์ จึงเป็นการแสดงกึ่งพิธีกรรม · (วันเวลาแสดงอาจเปลี่ยน ห้ามระบุในคลิป)'],
+    ['เถ้าฮงไถ่','โรงงานเถ้าฮงไถ่ อยู่ตำบลเจดีย์หัก อำเภอเมืองราชบุรี · รุ่นแรกเป็นชาวจีนที่พบว่าดินราชบุรีเหมาะทำโอ่งมังกร · ถึงรุ่นที่ 3 ตลาดโอ่งแข่งขันสูง จึงหันมาทำงานเซรามิกที่มีสีสันและรูปแบบใหม่ นำเทคโนโลยีจากเยอรมนีมาใช้ · เปิดให้ชมการขึ้นรูปและวาดลวดลาย พร้อมนิทรรศการศิลปะ'],
+    ['ร่องรอยเมืองทวารวดีที่คูบัว','เมืองโบราณคูบัว ตำบลคูบัว ห่างตัวเมืองราชบุรีไปทางตะวันออกเฉียงใต้ประมาณ 12 กิโลเมตร เป็นเมืองสำคัญสมัยทวารวดี · ผังเมืองเป็นรูปสี่เหลี่ยมผืนผ้าประมาณ 800 × 2,000 เมตร มีคันดินและคูน้ำล้อม พบโบราณสถาน 44 แห่ง · วัดโขลงสุวรรณคีรี เป็นโบราณสถานหมายเลข 18 ใหญ่ที่สุดในคูบัว · ปัจจุบันบางจุดดินรอบโบราณสถานถูกขุดจนแทบเป็นเกาะ และมีการถมที่ก่อสร้างประชิดโบราณสถาน'],
+    ['โอ๊ะป่อย ตลาดเช้าริมธาร','ตลาดเช้าริมธารโอ๊ะป่อย บ้านท่ามะขาม หมู่ 2 ตำบลตะนาวศรี อำเภอสวนผึ้ง หน้าวัดป่าท่ามะขาม · "โอ๊ะป่อย" เป็นภาษากะเหรี่ยง แปลว่า การพักผ่อน · ชาวบ้านส่วนใหญ่เป็นชาวกะเหรี่ยง · ช่วง 08.00–08.30 น. พระล่องแพกระบอกไม้ไผ่มาบิณฑบาต · ตลาดเกิดจากความร่วมมือของชุมชน วัด โรงเรียน และหน่วยงานท้องถิ่น · (วันเปิดและราคาอาจเปลี่ยน ห้ามระบุในคลิป)'],
+    ['ภาพชาวบ้านมอญบนผนังวัดคงคาราม','วัดคงคาราม อำเภอโพธาราม เป็นวัดมอญ ชื่อมอญเดิมว่า "เกี้ยโต้" ยกเป็นพระอารามหลวงสมัยรัชกาลที่ 4 · ผนังมีภาพทศชาติชาดก และภาพจุลปทุมชาดก ตอนพระยาเหี้ยช่วยพระปทุมกุมาร · ช่างเขียนแทรก "ภาพกาก" คือภาพชาวบ้านตามมุมต่าง ๆ บันทึกวิถีชีวิต เช่น การแต่งกายของสตรีมอญ · (อายุของภาพแหล่งไม่ตรงกัน ห้ามใส่ตัวเลข)']
+  ];
+  document.getElementById('pick').addEventListener('change',function(e){
+    var t=TOPICS[+e.target.value];if(e.target.value===''||!t)return;
+    S.topic=t[0];S.data='ข้อมูลเรื่อง '+t[0]+': '+t[1];save();toForm();render();
+  });
+
+  var KEY='prompt30s-v1';
+  function load(){try{var j=localStorage.getItem(KEY);if(j){S=JSON.parse(j)||{};return true;}}catch(e){}return false;}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+
+  function toForm(){
+    document.querySelectorAll('[data-k]').forEach(function(el){
+      var k=el.getAttribute('data-k'),v=S[k]||'';
+      if(el.type==='radio'){el.checked=(el.value===v);}else{el.value=v;}
+    });
+  }
+  function render(){
+    document.querySelectorAll('.prompt[data-p]').forEach(function(box){
+      var def=P[box.getAttribute('data-p')];if(!def)return;
+      var parts=def.parts(),missing=[];
+      var pre=box.querySelector('pre');
+      if(!pre){
+        box.innerHTML='';
+        var lab=document.createElement('div');lab.className='plabel';
+        var t=document.createElement('span');t.textContent=def.t;
+        var need=document.createElement('span');need.className='need';
+        lab.appendChild(t);lab.appendChild(need);
+        pre=document.createElement('pre');pre.className='ptext';
+        var b=document.createElement('button');b.type='button';b.className='copy';b.textContent='คัดลอก';
+        b.addEventListener('click',function(){copy(box,b);});
+        box.appendChild(lab);box.appendChild(pre);box.appendChild(b);
+      }
+      pre.textContent='';
+      parts.forEach(function(p){
+        if(typeof p==='string'){pre.appendChild(document.createTextNode(p));return;}
+        var v=(S[p.k]||'').trim(),sp=document.createElement('span');
+        if(v){sp.className='v';sp.textContent=v;}else{sp.className='m';sp.textContent='['+LABEL[p.k]+']';if(missing.indexOf(LABEL[p.k])<0)missing.push(LABEL[p.k]);}
+        pre.appendChild(sp);
+      });
+      var need=box.querySelector('.need');
+      if(missing.length){need.className='need';need.textContent='ยังไม่ได้กรอก: '+missing.join(', ');}
+      else{need.className='need ok';need.textContent='พร้อมคัดลอก';}
+    });
+  }
+  function copy(box,btn){
+    var text=box.querySelector('pre').textContent;
+    function done(){btn.classList.add('done');btn.textContent='คัดลอกแล้ว ✓ ไปวางได้เลย';setTimeout(function(){btn.classList.remove('done');btn.textContent='คัดลอก';},2200);}
+    function fallback(){
+      var ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.top='-1000px';document.body.appendChild(ta);ta.select();
+      var ok=false;try{ok=document.execCommand('copy');}catch(e){}
+      document.body.removeChild(ta);
+      if(ok){done();}else{var r=document.createRange();r.selectNodeContents(box.querySelector('pre'));var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='เลือกข้อความแล้ว กดค้างเพื่อคัดลอก';}
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,fallback);}else{fallback();}
+  }
+  document.addEventListener('input',function(e){var k=e.target.getAttribute&&e.target.getAttribute('data-k');if(!k)return;S[k]=e.target.value;save();render();});
+  document.addEventListener('change',function(e){var k=e.target.getAttribute&&e.target.getAttribute('data-k');if(!k)return;S[k]=e.target.value;save();render();});
+  document.getElementById('loadSample').addEventListener('click',function(){S=JSON.parse(JSON.stringify(SAMPLE));save();toForm();render();});
+  var clr=document.getElementById('clearAll'),armed=false,tm;
+  clr.addEventListener('click',function(){
+    if(!armed){armed=true;clr.textContent='กดอีกครั้งเพื่อล้าง';tm=setTimeout(function(){armed=false;clr.textContent='ล้างทั้งหมด';},3000);return;}
+    clearTimeout(tm);armed=false;clr.textContent='ล้างทั้งหมด';S={};save();toForm();render();
+  });
+  function goHash(){
+    var id=(location.hash||'').slice(1);if(!/^p[1-8]$/.test(id))return;
+    var el=document.getElementById(id);if(!el)return;
+    el.scrollIntoView({block:'start'});el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
+  }
+  if(!load()){S=JSON.parse(JSON.stringify(SAMPLE));}
+  toForm();render();goHash();
+  window.addEventListener('hashchange',goHash);
+})();
+</script>
+</body>
+</html>
