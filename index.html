@@ -75,6 +75,12 @@ button.ghost{background:transparent}
 .need.ok{color:var(--ok)}
 button.copy{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);padding:12px 16px;font-size:1rem}
 button.copy.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.covers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.covers label{display:flex;flex-direction:column;gap:4px;align-items:center;text-align:center;font-size:.82rem;font-weight:600;line-height:1.3;cursor:pointer;border:2px solid transparent;border-radius:10px;padding:4px}
+.covers img{width:100%;max-width:100%;border-radius:6px;display:block}
+.covers input{position:absolute;opacity:0;pointer-events:none}
+.covers label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.covers label:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:2px}
 .later{background:var(--ok-soft);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
 .later h3{font-size:1rem}
 footer{color:var(--muted);font-size:.85rem;text-align:center}
@@ -125,17 +131,10 @@ footer{color:var(--muted);font-size:.85rem;text-align:center}
           <label><input type="radio" name="gender" id="g-f" value="ผู้หญิง" data-k="gender">ผู้หญิง</label>
         </div>
       </fieldset>
-      <fieldset>
-        <legend>โทนสีปก</legend>
-        <div class="choice">
-          <label><input type="radio" name="tone" id="t-d" value="น้ำเงินเข้มแสงฟุ้ง" data-k="tone">น้ำเงินเข้ม</label>
-          <label><input type="radio" name="tone" id="t-l" value="ฟ้าสดใส" data-k="tone">ฟ้าสดใส</label>
-        </div>
-      </fieldset>
+      <label class="f" for="outfit">ชุดที่ผู้ประกาศใส่
+        <input type="text" id="outfit" data-k="outfit" placeholder="คิดชุดให้เข้ากับเรื่อง เช่น เสื้อม่อฮ่อม เสื้อลายดอก">
+      </label>
     </div>
-    <label class="f" for="outfit">ชุดที่ผู้ประกาศใส่
-      <input type="text" id="outfit" data-k="outfit" placeholder="เช่น เสื้อเชิ้ตลายสก็อตทับเสื้อยืดดำ">
-    </label>
     <div class="btns">
       <button type="button" class="main" id="loadSample">ใส่ตัวอย่าง: หิมะตกที่ราชบุรี</button>
       <button type="button" class="ghost" id="clearAll">ล้างทั้งหมด</button>
@@ -144,7 +143,7 @@ footer{color:var(--muted);font-size:.85rem;text-align:center}
   </section>
 
   <nav class="jump" aria-label="ไปที่ขั้น">
-    <a href="#p1">ขั้น 1</a><a href="#p2">ขั้น 2</a><a href="#p3">ขั้น 3</a><a href="#p4">ขั้น 4</a><a href="#p5">ขั้น 5</a><a href="#p6">ขั้น 6</a><a href="#p8">ขั้น 8</a>
+    <a href="#p1">ขั้น 1</a><a href="#p2">ขั้น 2</a><a href="#p3">ขั้น 3</a><a href="#p4">ขั้น 4</a><a href="#p5">ขั้น 5</a><a href="#p6">ขั้น 6</a><a href="#p7">ขั้น 7</a><a href="#p8">ขั้น 8</a>
   </nav>
 
   <section class="panel step" id="p1">
@@ -182,48 +181,60 @@ footer{color:var(--muted);font-size:.85rem;text-align:center}
 
   <section class="panel step" id="p5">
     <div class="head"><span class="badge">ขั้น 5</span><h2>ให้ AI พูด 3 ท่อน</h2><span class="app">Flow</span></div>
-    <p class="note">ใช้รูปพื้นเขียวรูปเดิมทุกครั้ง · ตั้งค่า 9:16 · 360p · 10 วินาที</p>
+    <p class="note">ตั้งค่า 9:16 · <b>720p</b> · 10 วินาที · <b>3 ท่อนทำใน 3 บัญชี คนละท่อน + สำรอง 1 บัญชี</b> (ทีมต้องมีอย่างน้อย 4 คนที่ล็อกอิน Flow ได้) (720p ใช้ราว 30–40 เครดิตต่อท่อน บัญชีฟรีมีวันละ 50) · <b>เจ้าของงานกดคัดลอกทีละท่อน ส่งเข้ากลุ่ม LINE ทีม</b> แต่ละคนก๊อปท่อนของตัวเองไปวาง · ทุกคนใช้รูปพื้นเขียวรูปเดียวกัน · เสร็จแล้วส่งคลิปเข้ากลุ่ม LINE ให้คนตัดต่อ</p>
     <div class="prompt" data-p="p5a"></div>
     <div class="prompt" data-p="p5b"></div>
     <div class="prompt" data-p="p5c"></div>
   </section>
 
   <section class="panel step" id="p6">
-    <div class="head"><span class="badge">ขั้น 6</span><h2>ภาพปก + ภาพฉากหลัง</h2><span class="app">Gemini</span></div>
-    <div class="later">
-      <h3>ข้อความปก (จากคำตอบขั้น 2)</h3>
-      <div class="row2">
-        <label class="f" for="rib">คำบนริบบิ้น<input type="text" id="rib" data-k="rib" placeholder="เช่น รู้หรือไม่!"></label>
-        <label class="f" for="head">หัวข้อข่าว<input type="text" id="head" data-k="head"></label>
+    <div class="head"><span class="badge">ขั้น 6</span><h2>ภาพปก + ภาพฉากหลัง 6 ภาพ</h2><span class="app">Gemini</span></div>
+    <p class="note">ไม่ต้องคิดฉากเอง Gemini วางแผนภาพทั้ง 6 ภาพให้จากบท 3 ท่อนในขั้น 3</p>
+    <fieldset>
+      <legend>6.1 เลือกแบบปกที่ชอบ <small class="sample">เลือกแค่หน้าตาปก ส่วนภาพด้านบนและข้อความ Gemini ทำให้ตรงกับเรื่องของทีม · กดค้างที่ภาพ → บันทึกรูป ไว้แนบให้ Gemini</small></legend>
+      <div class="covers">
+        <label><input type="radio" name="style" value="c1" data-k="style"><img src="covers/c1.jpg" alt="ปกตัวอย่าง ข่าวบริการ โทนน้ำเงินเข้ม"><span>ข่าวบริการ<br>น้ำเงินเข้ม</span></label>
+        <label><input type="radio" name="style" value="c2" data-k="style"><img src="covers/c2.jpg" alt="ปกตัวอย่าง ข่าวเจาะลึก โทนน้ำเงินเข้ม"><span>ข่าวเจาะลึก<br>น้ำเงินเข้ม</span></label>
+        <label><input type="radio" name="style" value="c3" data-k="style"><img src="covers/c3.jpg" alt="ปกตัวอย่าง ท่องเที่ยว โทนน้ำเงินเข้ม"><span>ท่องเที่ยว<br>น้ำเงินเข้ม</span></label>
+        <label><input type="radio" name="style" value="c4" data-k="style"><img src="covers/c4.jpg" alt="ปกตัวอย่าง ของดีท้องถิ่น โทนฟ้าสดใส"><span>ของดีท้องถิ่น<br>ฟ้าสดใส</span></label>
+        <label><input type="radio" name="style" value="c5" data-k="style"><img src="covers/c5.jpg" alt="ปกตัวอย่าง อาชีพท้องถิ่น โทนฟ้าสดใส"><span>อาชีพท้องถิ่น<br>ฟ้าสดใส</span></label>
+        <label><input type="radio" name="style" value="c6" data-k="style"><img src="covers/c6.jpg" alt="ปกตัวอย่าง ข่าวด่วน แบบนีออน"><span>ข่าวด่วน<br>นีออนสดใส</span></label>
       </div>
-      <label class="f" for="scene">ภาพด้านบนของปกเป็นฉากอะไร<input type="text" id="scene" data-k="scene"></label>
-      <div class="row2">
-        <label class="f" for="f1">ข้อเท็จจริง 1 <small>เว้นว่างได้ ถ้าไม่ต้องการแผงข้อมูล</small><input type="text" id="f1" data-k="f1"></label>
-        <label class="f" for="f1b">บรรทัดรอง 1<input type="text" id="f1b" data-k="f1b"></label>
-        <label class="f" for="f2">ข้อเท็จจริง 2<input type="text" id="f2" data-k="f2"></label>
-        <label class="f" for="f2b">บรรทัดรอง 2<input type="text" id="f2b" data-k="f2b"></label>
-      </div>
-    </div>
+    </fieldset>
+    <h3>6.2 ให้ Gemini วางแผนภาพ 6 ภาพ</h3>
+    <p class="note">เปิดแชทใหม่ใน Gemini วาง Prompt นี้ Gemini จะตอบกลับเป็นคำสั่งสร้างภาพ 6 ข้อ</p>
     <div class="prompt" data-p="p6"></div>
+    <h3>6.3 ก๊อปคำสั่งจาก Gemini ไปสร้างภาพทีละข้อ</h3>
+    <ol class="how">
+      <li><b class="n">1</b><span>Gemini ตอบเป็นกล่อง 6 กล่อง "ภาพที่ 1" ถึง "ภาพที่ 6" กดปุ่มคัดลอกที่มุมกล่อง <b>ภาพที่ 1</b></span></li>
+      <li><b class="n">2</b><span><b>เฉพาะภาพที่ 1 (ปก) ภาพเดียว</b> แนบรูปปกตัวอย่างที่บันทึกไว้ แล้ววางคำสั่ง → ส่ง → ดาวน์โหลดภาพ</span></li>
+      <li><b class="n">3</b><span>ก๊อปกล่อง <b>ภาพที่ 2</b> ไปวาง → ส่ง → ดาวน์โหลด ทำแบบนี้จนครบ 6 ภาพ · <b>ภาพที่ 2–6 ห้ามแนบรูปปก</b> ไม่อย่างนั้น Gemini จะทำออกมาเป็นปกซ้ำ</span></li>
+    </ol>
+    <p class="note"><b>อ่านกล่องก่อนก๊อป:</b> ไม่ชอบฉากไหน แก้คำในกล่องได้เลย เช่น เปลี่ยน "ก๊อกน้ำ" เป็น "บ่อน้ำในหมู่บ้าน"</p>
+    <p class="note"><b>ถ้า Gemini ค้าง:</b> เปิดแชทใหม่ แล้วก๊อปกล่องภาพที่ยังไม่ได้ไปวางต่อได้เลย</p>
     <div class="later">
-      <h3>ภาพฉากหลัง 2–6 เป็นฉากอะไร</h3>
-      <label class="f" for="b2">ภาพ 2 <small>5–10 วิ</small><input type="text" id="b2" data-k="b2"></label>
-      <label class="f" for="b3">ภาพ 3 <small>10–15 วิ</small><input type="text" id="b3" data-k="b3"></label>
-      <label class="f" for="b4">ภาพ 4 <small>15–20 วิ</small><input type="text" id="b4" data-k="b4"></label>
-      <label class="f" for="b5">ภาพ 5 <small>20–25 วิ</small><input type="text" id="b5" data-k="b5"></label>
-      <label class="f" for="b6">ภาพ 6 <small>25–30 วิ</small><input type="text" id="b6" data-k="b6"></label>
+      <h3>6.4 เสริม: ทำให้ภาพเคลื่อนไหว (ทำหรือไม่ก็ได้)</h3>
+      <p class="note">ใต้กล่องภาพที่ 2–6 Gemini เขียนกล่อง <b>"เคลื่อนไหวภาพที่ …"</b> ไว้ให้ด้วย ใครมีเครดิต Flow เหลือ ใช้ได้เลย</p>
+      <ol class="how">
+        <li><b class="n">1</b><span>เปิด Flow ตั้งค่า 9:16 · 720p · ความยาวสั้นที่สุดที่เลือกได้</span></li>
+        <li><b class="n">2</b><span>ใส่ภาพนิ่งที่ได้จาก 6.3 ในช่อง "เริ่ม" → วางกล่อง "เคลื่อนไหวภาพที่ …" → ส่ง → ดาวน์โหลด</span></li>
+        <li><b class="n">3</b><span>ใช้บัญชีของคนทำภาพเอง ไม่ต้องใช้เครดิตของผู้ประกาศ · ภาพที่ 1 (ปก) ไม่ต้องทำ ใช้ซูมใน CapCut แทน</span></li>
+      </ol>
     </div>
-    <p class="note">เริ่มแชทใหม่ วาง Prompt 7 ก่อน จากนั้นวางบรรทัด "ภาพต่อไป" ทีละอันในแชทเดิม</p>
-    <div class="prompt" data-p="p7"></div>
-    <div class="prompt" data-p="p7b3"></div>
-    <div class="prompt" data-p="p7b4"></div>
-    <div class="prompt" data-p="p7b5"></div>
-    <div class="prompt" data-p="p7b6"></div>
+  </section>
+
+  <section class="panel step" id="p7">
+    <div class="head"><span class="badge">ขั้น 7</span><h2>ตัดต่อใน CapCut</h2><span class="app">CapCut</span></div>
+    <p class="note">ขั้นนี้ไม่มี Prompt ทำตามคู่มือทีละปุ่ม ของที่ต้องมีในมือถือก่อนเริ่ม:</p>
+    <ul class="how">
+      <li><b class="n">✓</b><span>ภาพ 6 ภาพจากขั้น 6 (ภาพที่ 1 คือปก)</span></li>
+      <li><b class="n">✓</b><span>วิดีโอผู้ประกาศพื้นเขียว 3 ไฟล์จากขั้น 5</span></li>
+      <li><b class="n">✓</b><span>พาดหัวที่จะพิมพ์ในคลิป และป้าย "ผู้ประกาศและภาพประกอบสร้างด้วย AI"</span></li>
+    </ul>
   </section>
 
   <section class="panel step" id="p8">
     <div class="head"><span class="badge">ขั้น 8</span><h2>แคปชันโพสต์</h2><span class="app">Gemini</span></div>
-    <p class="note">ขั้น 7 ตัดต่อใน CapCut ไม่มี Prompt</p>
     <div class="prompt" data-p="p8"></div>
   </section>
 
@@ -232,7 +243,7 @@ footer{color:var(--muted);font-size:.85rem;text-align:center}
 
 <script>
 (function(){
-  var LABEL={topic:'ชื่อเรื่อง',data:'ชุดข้อมูล',gender:'ผู้ชาย/ผู้หญิง',tone:'โทนสีปก',outfit:'ชุดที่ใส่',angle:'มุมที่ทีมเลือก',hook:'Hook ที่เลือก',
+  var LABEL={topic:'ชื่อเรื่อง',data:'ชุดข้อมูล',gender:'ผู้ชาย/ผู้หญิง',style:'เลือกแบบปกด้านบน',outfit:'ชุดที่ใส่',angle:'มุมที่ทีมเลือก',hook:'Hook ที่เลือก',
     s1:'บทท่อน 1',s2:'บทท่อน 2',s3:'บทท่อน 3',rib:'คำบนริบบิ้น',head:'หัวข้อข่าว',scene:'ฉากด้านบนของปก',
     f1:'ข้อเท็จจริง 1',f1b:'บรรทัดรอง 1',f2:'ข้อเท็จจริง 2',f2b:'บรรทัดรอง 2',b2:'ฉากภาพ 2',b3:'ฉากภาพ 3',b4:'ฉากภาพ 4',b5:'ฉากภาพ 5',b6:'ฉากภาพ 6'};
   var S={};
@@ -244,21 +255,27 @@ footer{color:var(--muted);font-size:.85rem;text-align:center}
     p4:{t:'Prompt 4 · รูปผู้ประกาศพื้นเขียว',parts:function(){return ['ใช้ใบหน้าของคนในรูปที่แนบ ห้ามเปลี่ยนหน้าตา ทำเป็นภาพถ่ายเหมือนจริง เห็นครึ่งตัวตั้งแต่หัวถึงเอว ยืนตรงกลางภาพ หันหน้าตรง มองกล้อง ยิ้มเล็กน้อย มือขวาถือไมค์สีดำระดับอก ใส่',F('outfit'),'\nพื้นหลังเป็นสีเขียวล้วนเรียบ (กรีนสกรีน) ไม่มีเงาบนพื้นหลัง แสงสว่างสม่ำเสมอทั้งตัว แนวตั้ง 9:16 ไม่มีตัวหนังสือ'];}}
   };
   function p5(k){return function(){return [F('gender'),'ในภาพเป็นพิธีกรรายการท่องเที่ยวสายตื่นเต้น ยืนหน้าฉากสีเขียวเรียบ ฉากหลังเป็นสีเขียวล้วนตลอดทั้งคลิป ถือไมค์ มองตรงเข้ากล้อง น้ำเสียงตื่นเต้น มีพลัง เสียงขึ้นสูงลงต่ำชัดเจน เน้นเสียงคำสำคัญ จังหวะเร็ว กระชับ ไม่เว้นช่วงนาน ตาเป็นประกาย มือผายประกอบการพูด กล้องนิ่ง พูดว่า: "',F(k),'" พูดจบแล้วยิ้มนิ่ง ๆ มองกล้อง ไม่พูดอะไรเพิ่ม ห้ามพูดซ้ำ ไม่มีเพลง เสียงพูดอย่างเดียว'];};}
-  P.p5a={t:'Prompt 5 · ท่อน 1',parts:p5('s1')};
-  P.p5b={t:'Prompt 5 · ท่อน 2',parts:p5('s2')};
-  P.p5c={t:'Prompt 5 · ท่อน 3',parts:p5('s3')};
-  P.p6={t:'Prompt 6 · ภาพปก',parts:function(){
-    var a=['ทำปกคลิปแนวตั้ง 9:16 สไตล์ปกข่าวไทย ภาพเหตุการณ์ด้านบน พื้นหลัง',F('tone'),' ริบบิ้นแดงสามมิติ ป้ายเล็กด้านบน "ภาพประกอบสร้างด้วย AI"\nไม่ต้องมีคน เว้นพื้นที่ด้านล่าง 35% ให้ว่าง\nภาพด้านบน: ',F('scene'),'\nริบบิ้นแดง: "',F('rib'),'" ใต้ลงมาตัวหนาสีขาว: "',F('head'),'"'];
-    if((S.f1||'').trim()||(S.f2||'').trim()){a=a.concat(['\nแผงข้อมูลสีกรมท่า 2 แถว หัวข้อสีเหลือง บรรทัดรองสีขาว: "',F('f1'),'" / "',F('f1b'),'" · "',F('f2'),'" / "',F('f2b'),'"']);}
-    return a.concat(['\nตัวหนังสือทุกคำต้องสะกดตรงตามที่กำหนดทุกตัวอักษร ห้ามมีตัวหนังสืออื่น ไม่มีโลโก้']);}};
-  P.p7={t:'Prompt 7 · ภาพ 2 (วางก่อน)',parts:function(){return ['สร้างภาพถ่ายเหมือนจริง แนวตั้ง 9:16: ',F('b2'),'\nจุดสำคัญของภาพอยู่ครึ่งบน ครึ่งล่างของภาพเรียบ ๆ ไม่มีจุดสำคัญ (จะมีคนยืนบัง) ด้านบนสุดโล่งพอวางพาดหัว ไม่มีตัวหนังสือ ไม่มีโลโก้ ถ้ามีคนให้เห็นหน้าไม่ชัด ห้ามเป็นบุคคลจริงที่ระบุตัวตนได้'];}};
-  ['b3','b4','b5','b6'].forEach(function(k){P['p7'+k]={t:'ภาพ '+k.slice(1)+' (วางต่อในแชทเดิม)',parts:function(){return ['ภาพต่อไป สไตล์เดียวกัน: ',F(k)];}};});
+  P.p5a={t:'Prompt 5 · ท่อน 1 · บัญชีคนที่ 1',parts:p5('s1')};
+  P.p5b={t:'Prompt 5 · ท่อน 2 · บัญชีคนที่ 2',parts:p5('s2')};
+  P.p5c={t:'Prompt 5 · ท่อน 3 · บัญชีคนที่ 3',parts:p5('s3')};
+  var PANEL=' ริบบิ้นแดงสามมิติ ใต้ลงมาหัวข้อตัวหนาสีขาว แผงข้อมูลสีกรมท่า 2 แถว หัวข้อสีเหลือง บรรทัดรองสีขาว';
+  var STYLE={
+    c1:'สไตล์ปกข่าวไทย พื้นหลังน้ำเงินเข้มแสงฟุ้ง'+PANEL,
+    c2:'สไตล์ปกข่าวไทย พื้นหลังน้ำเงินเข้มแสงฟุ้ง'+PANEL,
+    c3:'สไตล์ปกข่าวไทย พื้นหลังน้ำเงินเข้มแสงฟุ้ง'+PANEL,
+    c4:'สไตล์ปกข่าวไทย พื้นหลังฟ้าสดใสแสงฟุ้ง'+PANEL,
+    c5:'สไตล์ปกข่าวไทย พื้นหลังฟ้าสดใสแสงฟุ้ง'+PANEL,
+    c6:'สไตล์ปกข่าวไทยแบบสดใส พื้นหลังฟ้า-น้ำเงินสว่างแสงฟุ้ง แคปซูลสีแดงคำสั้น ใต้ลงมาพาดหัวตัวใหญ่มากสีเขียวนีออนไล่เหลืองขอบน้ำเงิน บรรทัดรองตัวหนาสีขาว มีประกายแสงวิบวับ ไม่มีแผงข้อมูล'
+  };
+  P.p6={t:'Prompt 6 · ให้ Gemini วางแผนภาพ 6 ภาพ',parts:function(){return [
+    'คุณเป็นทีมกราฟิกข่าว ช่วยวางแผนภาพประกอบคลิปแนวตั้ง 30 วินาที เรื่อง ',F('topic'),' จำนวน 6 ภาพ ภาพละ 5 วินาที ให้ตรงกับบทนี้\nท่อน 1 (ภาพ 1–2): ',F('s1'),'\nท่อน 2 (ภาพ 3–4): ',F('s2'),'\nท่อน 3 (ภาพ 5–6): ',F('s3'),
+    '\n\nเขียนเป็นคำสั่งสร้างภาพพร้อมใช้ 6 ข้อ ใส่แต่ละข้อใน code block แยกกัน 6 กล่อง เพื่อให้กดคัดลอกได้ทีละข้อ แต่ละกล่องขึ้นต้นว่า "สร้างภาพที่ 1:" ถึง "สร้างภาพที่ 6:" และต้องครบในตัว ก๊อปไปวางในแชทไหนก็สร้างภาพได้ทันที\n\nภาพที่ 1 เป็นปกคลิป แนวตั้ง 9:16 ',F('style'),' ใช้ภาพที่แนบเป็นแบบหน้าตาปกได้ ภาพเหตุการณ์ของเรื่องอยู่ด้านบน ป้ายเล็กด้านบนสุด "ภาพประกอบสร้างด้วย AI" ไม่มีคน เว้นพื้นที่ด้านล่าง 35% ให้ว่าง · คิดข้อความบนปกจากข้อมูลจริงเท่านั้น หัวข้อไม่เกิน 8 คำ ใส่ข้อความทุกคำไว้ในเครื่องหมายคำพูด และกำชับว่าต้องสะกดตรงทุกตัวอักษร ห้ามมีตัวหนังสืออื่น\n\nภาพที่ 2–6 เป็นภาพถ่ายเหมือนจริง แนวตั้ง 9:16 แต่ละภาพตรงกับประโยคที่พูดในช่วงนั้น จุดสำคัญอยู่ครึ่งบน ครึ่งล่างเรียบ ๆ (จะมีคนยืนบัง) ไม่มีตัวหนังสือ ไม่มีโลโก้ ถ้ามีคนให้เห็นหน้าไม่ชัด ห้ามเป็นบุคคลจริงที่ระบุตัวตนได้ ทุกภาพโทนสีเดียวกัน\n\nใต้กล่องภาพที่ 2–6 แต่ละภาพ เพิ่มอีก 1 กล่อง ขึ้นต้นว่า "เคลื่อนไหวภาพที่ 2:" ถึง "เคลื่อนไหวภาพที่ 6:" เป็นคำสั่งสำหรับทำภาพนั้นเป็นวิดีโอสั้นใน Google Flow บอกว่าอะไรในภาพขยับอย่างไรแบบเป็นธรรมชาติ (เช่น หิมะตก ใบไม้ไหว รถวิ่งช้า) กล้องค่อย ๆ ดันเข้าช้า ๆ ห้ามเปลี่ยนหน้าตาสิ่งของ ห้ามเพิ่มคน ไม่มีตัวหนังสือ ไม่มีเสียง · ใช้คำว่า "ภาพ" ห้ามใช้คำว่า "ข่าว"\n\nใช้เฉพาะข้อมูลนี้: ',F('data'),'\nส่งเฉพาะกล่องคำสั่ง ไม่ต้องอธิบาย'];}};
   P.p8={t:'Prompt 8 · แคปชันโพสต์',parts:function(){return ['เขียนแคปชันโพสต์ Facebook สำหรับคลิปสั้นเรื่อง ',F('topic'),' ยาว 3–4 บรรทัด เปิดด้วยประโยคชวนสงสัย ใส่อีโมจิ 2–3 ตัว ปิดด้วยคำถามชวนคอมเมนต์ ตามด้วยแฮชแท็ก 3 อัน บรรทัดสุดท้ายเขียนว่า "ผู้ประกาศและภาพประกอบในคลิปสร้างด้วย AI" ใช้ข้อมูลจากบทนี้เท่านั้น ห้ามเพิ่มข้อมูลใหม่:\n',F('s1'),'\n',F('s2'),'\n',F('s3'),'\nขอ 3 แบบให้เลือก'];}};
 
   var SAMPLE={
     topic:'หิมะตกที่ราชบุรี',
     data:'ข้อมูลสมมติสำหรับฝึก (ไม่ใช่เหตุการณ์จริง): เช้าวันที่ 18 ธันวาคม 2569 มีหิมะตกบนถนนเพชรเกษม ช่วงซุ้มป้ายยินดีต้อนรับสู่จังหวัดราชบุรี ถนนขาวทั้งเส้น รถขับช้าและเปิดไฟหน้า ชาวบ้านออกมาถ่ายรูป ต้นตาลข้างทางมีหิมะเกาะ อุณหภูมิติดลบ 1 องศา · เฉลย: ภาพทั้งหมดสร้างด้วย AI เพื่อสอนว่าข่าวปลอมทำได้ง่าย ต้องเช็กก่อนแชร์',
-    gender:'ผู้ชาย',tone:'ฟ้าสดใส',outfit:'เสื้อโค้ทพองสีแดงเลือดหมู ผ้าพันคอไหมพรมสีเทา และหมวกไหมพรมสีเทา',
+    gender:'ผู้ชาย',style:'c6',outfit:'เสื้อโค้ทพองสีแดงเลือดหมู ผ้าพันคอไหมพรมสีเทา และหมวกไหมพรมสีเทา',
     angle:'ข่าวปลอมที่ AI ทำได้ใน 30 วินาที: เปิดด้วยภาพหิมะตกที่ราชบุรีให้คนตกใจ แล้วเฉลยตอนจบว่าทั้งหมด AI สร้าง',
     hook:'ใครจะเชื่อครับ! หิมะตกที่ราชบุรี!',
     s1:'ใครจะเชื่อครับ! หิมะตกที่ราชบุรี! ตอนนี้ผมอยู่หน้าซุ้มป้ายยินดีต้อนรับสู่ราชบุรี ถนนทั้งเส้นขาวโพลนไปหมดเลยครับ',
@@ -320,7 +337,7 @@ footer{color:var(--muted);font-size:.85rem;text-align:center}
       pre.textContent='';
       parts.forEach(function(p){
         if(typeof p==='string'){pre.appendChild(document.createTextNode(p));return;}
-        var v=(S[p.k]||'').trim(),sp=document.createElement('span');
+        var v=(p.k==='style'?(STYLE[S.style]||''):(S[p.k]||'')).trim(),sp=document.createElement('span');
         if(v){sp.className='v';sp.textContent=v;}else{sp.className='m';sp.textContent='['+LABEL[p.k]+']';if(missing.indexOf(LABEL[p.k])<0)missing.push(LABEL[p.k]);}
         pre.appendChild(sp);
       });
